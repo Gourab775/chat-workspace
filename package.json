@@ -1,5 +1,6 @@
 {
   "name": "ai-chat-assistant",
+  "description": "Embeddable chat workspace with page-context awareness and backend service integration",
   "version": "1.0.0",
   "private": true,
   "scripts": {
