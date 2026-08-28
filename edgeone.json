@@ -2,7 +2,10 @@
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
   "framework": "nextjs",
+  "services": {
+    "framework": "workflow"
+  },
   "agents": {
-    "framework": "deepagents"
+    "framework": "workflow"
   }
 }
