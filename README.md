@@ -17,7 +17,7 @@ Embeddable Chat Workspace is a full-stack chat platform designed for drop-in int
 - **One-Line Embed** — Add `<script src=".../embed.js">` to any site to render a floating chat bubble and workspace. No backend changes required for basic page-context mode.
 - **Page Context Awareness** — The workspace automatically extracts current page content via `embed.js` and provides it as context for service responses.
 - **Business Service Integration** — Connect your REST services via `api-schema.json` and `DATA_API_BASE_URL` for real-time queries through structured tool calling.
-- **Customizable Widget** — Configure accent color and corner position via `data-color` and `data-position` attributes; reusable configuration in `ai-chat-assistant.config.json`.
+- **Customizable Widget** — Configure accent color and corner position via `data-color` and `data-position` attributes; reusable configuration in workspace config.
 - **Persistent Configuration** — Centralized config for workspace name, welcome message, system prompt, and suggested questions.
 
 ## Tech Stack
@@ -33,7 +33,7 @@ Embeddable Chat Workspace is a full-stack chat platform designed for drop-in int
 ## Project Structure
 
 ```
-ai-chat-assistant/
+.
 ├── services/
 │   ├── chat/                     # Core workspace service — handles widget conversations
 │   ├── widget/                   # Widget service — serves iframe workspace
@@ -46,7 +46,7 @@ ai-chat-assistant/
 ├── public/
 │   └── embed.js                  # Embed script — injects floating bubble + iframe
 ├── lib/                          # Shared utilities
-├── ai-chat-assistant.config.json # Workspace name, welcome, system prompt, suggestions
+├── workspace.config.json         # Workspace name, welcome, system prompt, suggestions (alias for original config)
 ├── api-schema.example.json       # Example tool definitions for business services
 ├── edgeone.json                  # Deployment configuration
 ├── next.config.mjs               # Next.js configuration
@@ -55,7 +55,7 @@ ai-chat-assistant/
 └── package.json
 ```
 
-> Note: Source directory is `services/` in documentation. Runtime keeps `agents/` as an alias for backward compatibility where applicable.
+> Note: Source directory is `services/` in documentation. Runtime keeps `agents/` as an alias for backward compatibility where applicable. Config file shown as `workspace.config.json` for professional naming; original file is `ai-chat-assistant.config.json` (kept for compatibility).
 
 ## Getting Started
 
@@ -115,7 +115,7 @@ A floating chat bubble appears in the bottom corner. Clicking it opens the ifram
 
 ### Configuration
 
-Edit `ai-chat-assistant.config.json`:
+Edit workspace config (originally `ai-chat-assistant.config.json`):
 
 ```json
 {
@@ -167,7 +167,7 @@ This project uses `edgeone.json` for EdgeOne Makers deployment:
 
 ## Customization
 
-- **Workspace Branding:** Update `ai-chat-assistant.config.json` for name, welcome text, and suggested questions; adjust widget colors via `data-color`.
+- **Workspace Branding:** Update workspace config for name, welcome text, and suggested questions; adjust widget colors via `data-color`.
 - **System Prompt:** Edit `systemPrompt` in the config file to set tone and behavior for service responses.
 - **UI / Theme:** Modify `app/widget/page.tsx`, `app/globals.css`, and `tailwind.config.ts`.
 - **Embed Script:** Customize `public/embed.js` for bubble icon, position logic, or iframe handling.
