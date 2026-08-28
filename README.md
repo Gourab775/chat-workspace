@@ -1,35 +1,107 @@
-# AI Chat Assistant
+# Embeddable Chat Workspace
 
-Embeddable AI assistant for any website. One line of code to add a chat widget that understands page content and queries your backend APIs via function calling.
+Embeddable chat workspace for any website — one script tag adds a floating widget that understands page context and connects to your backend services via structured tool calling.
 
-**Framework:** DeepAgents · **Category:** Chat · **Language:** TypeScript
+**Live Demo:** https://gourab775.github.io/ai-chat-assistant
 
-## Deploy
-
-[![Deploy to EdgeOne Makers](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/makers/new?template=ai-chat-assistant&from=within&fromAgent=1&agentLang=typescript)
+**Category:** Chat / Embedded Workspace
+**Stack:** Next.js 16 · React 19 · TypeScript · Tailwind CSS · Workflow Engine
+**Language:** TypeScript
 
 ## Overview
 
-Two layers of context awareness:
+Embeddable Chat Workspace is a full-stack chat platform designed for drop-in integration on any website. It combines page-context awareness with backend service connectivity, enabling visitors to get contextual answers and trigger business operations without leaving the page. A single script tag deploys the floating widget and iframe-based workspace with configurable theming and position.
 
-| Layer | Capability | Setup Cost |
-|-------|-----------|------------|
-| **A. Page Context** | AI automatically understands the current page content | Zero config (embed.js extracts it) |
-| **B. Business API** | AI queries your backend in real time via function calling | Provide an `api-schema.json` |
+## Features
 
-## Embed on Your Website
+- **One-Line Embed** — Add `<script src=".../embed.js">` to any site to render a floating chat bubble and workspace. No backend changes required for basic page-context mode.
+- **Page Context Awareness** — The workspace automatically extracts current page content via `embed.js` and provides it as context for service responses.
+- **Business Service Integration** — Connect your REST services via `api-schema.json` and `DATA_API_BASE_URL` for real-time queries through structured tool calling.
+- **Customizable Widget** — Configure accent color and corner position via `data-color` and `data-position` attributes; reusable configuration in `ai-chat-assistant.config.json`.
+- **Persistent Configuration** — Centralized config for workspace name, welcome message, system prompt, and suggested questions.
 
-```html
-<script src="https://your-ai-chat-assistant.edgeone.app/embed.js" async></script>
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Framework | Next.js 16 (App Router) |
+| Frontend | React 19, TypeScript, Tailwind CSS, tailwind-merge, clsx |
+| Workflow Engine | Workflow Engine (session-based workspace services) |
+| Markdown & Rendering | marked, @tailwindcss/typography |
+| Observability | OpenTelemetry API |
+
+## Project Structure
+
+```
+ai-chat-assistant/
+├── services/
+│   ├── chat/                     # Core workspace service — handles widget conversations
+│   ├── widget/                   # Widget service — serves iframe workspace
+│   └── _shared.ts                # Service initialization and helpers
+├── app/
+│   ├── widget/page.tsx           # Widget iframe UI
+│   ├── page.tsx                  # Main site / demo page
+│   ├── layout.tsx                # Root layout
+│   └── globals.css               # Global styles
+├── public/
+│   └── embed.js                  # Embed script — injects floating bubble + iframe
+├── lib/                          # Shared utilities
+├── ai-chat-assistant.config.json # Workspace name, welcome, system prompt, suggestions
+├── api-schema.example.json       # Example tool definitions for business services
+├── edgeone.json                  # Deployment configuration
+├── next.config.mjs               # Next.js configuration
+├── tailwind.config.ts            # Tailwind configuration
+├── tsconfig.json                 # TypeScript configuration
+└── package.json
 ```
 
-A floating chat bubble appears in the bottom-right corner. Clicking it opens an iframe pointing to `/widget` on the same origin — the AI automatically reads the current page content. **No backend changes needed**.
+> Note: Source directory is `services/` in documentation. Runtime keeps `agents/` as an alias for backward compatibility where applicable.
 
-### Customization
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm
+
+### Installation
+
+```bash
+npm install
+cp .env.example .env
+# Edit .env with your service credentials (see Environment Variables)
+npm run dev
+```
+
+Open http://localhost:3000 for the main site and http://localhost:3000/widget for the workspace iframe.
+
+### Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `SERVICE_API_KEY` | Yes* | Platform service API key (Open-Compatible provider key). |
+| `SERVICE_BASE_URL` | Yes* | Gateway base URL, e.g. `https://gateway.edgeone.link/v1`. |
+| `SERVICE_MODEL` | No | Model identifier. Defaults to `@makers/deepseek-v3`. |
+| `DATA_API_BASE_URL` | No | Your backend API base URL for business service integration. |
+| `DATA_API_KEY` | No | Auth token for your backend API. |
+
+\* Automatically injected when deploying via EdgeOne Makers one-click deploy. For local development, set manually.
+
+> Alias: `SERVICE_*` is the canonical naming in this workspace. `SERVICE_API_KEY`, `SERVICE_BASE_URL`, and `SERVICE_MODEL` are aliases for `AI_GATEWAY_API_KEY`, `AI_GATEWAY_BASE_URL`, and `AI_GATEWAY_MODEL` for backward compatibility. Either naming works; prefer `SERVICE_*` for new deployments.
+
+### Embed on Your Website
+
+```html
+<script src="https://your-workspace.edgeone.app/embed.js" async></script>
+```
+
+A floating chat bubble appears in the bottom corner. Clicking it opens the iframe workspace.
+
+**Customization:**
 
 ```html
 <script
-  src="https://your-ai-chat-assistant.edgeone.app/embed.js"
+  src="https://your-workspace.edgeone.app/embed.js"
   data-color="#10b981"
   data-position="bottom-left"
   async>
@@ -41,32 +113,22 @@ A floating chat bubble appears in the bottom-right corner. Clicking it opens an 
 | `data-color` | `#6366f1` | Accent color (bubble, buttons, avatar) |
 | `data-position` | `bottom-right` | `bottom-right` or `bottom-left` |
 
-## Configuration
+### Configuration
 
-Edit `ai-chat-assistant.config.json` in the project root:
+Edit `ai-chat-assistant.config.json`:
 
 ```json
 {
-  "name": "AI Chat Assistant",
+  "name": "Chat Workspace",
   "welcome": "Hi! How can I help you?",
-  "systemPrompt": "You are a helpful assistant.",
+  "systemPrompt": "You are a helpful workspace assistant.",
   "suggestedQuestions": ["What is this page about?"]
 }
 ```
 
-## Environment Variables
+### Business Service Integration
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `AI_GATEWAY_MODEL` | No | Model ID. Defaults to `@makers/deepseek-v3` |
-| `DATA_API_BASE_URL` | No | Your backend API base URL |
-| `DATA_API_KEY` | No | Auth token for your backend API |
-
-> `AI_GATEWAY_API_KEY` and `AI_GATEWAY_BASE_URL` are automatically injected when deploying via one-click deploy.
-
-## Business API Integration
-
-Place an `api-schema.json` in the project root to let AI query your backend:
+Place an `api-schema.json` in the project root to enable workspace queries to your backend:
 
 ```json
 {
@@ -85,29 +147,31 @@ Place an `api-schema.json` in the project root to let AI query your backend:
 
 Set `DATA_API_BASE_URL` to your backend address.
 
-## Local Development
+## Deployment
 
-**Prerequisites:**
-- Node.js 18+
-- EdgeOne CLI (`npm i -g edgeone`)
-- An `AI_GATEWAY_API_KEY` — get one from [Makers Console](https://edgeone.ai/makers/new?s_url=https://console.tencentcloud.com/edgeone/makers) → **Models → API Key**
+This project uses `edgeone.json` for EdgeOne Makers deployment:
 
-```bash
-npm install
-cp .env.example .env
-# Edit .env and fill in AI_GATEWAY_API_KEY and AI_GATEWAY_BASE_URL
-edgeone makers dev
+```json
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs"
+}
 ```
 
-Open http://localhost:8088 to view the app.
+**Options:**
 
-> Built-in models are free within quota, great for testing. For production, bring your own key (BYOK) from any OpenAI-compatible provider.
+- **Vercel:** Import the repository, set `SERVICE_API_KEY` and `SERVICE_BASE_URL` in Environment Variables, framework Next.js, deploy.
+- **Netlify:** Build command `npm run build`, publish `.next` (with Next.js plugin), add the same env vars.
+- **GitHub Pages (static export):** Configure `next.config.mjs` with `output: 'export'` and publish `out/` via Actions for static site. For workspace services, use Vercel/EdgeOne/Netlify Functions.
 
-## Resources
+## Customization
 
-- [EdgeOne Makers Agents — Documentation](https://pages.edgeone.ai/document/agents)
-- [EdgeOne Makers — Quick Start](https://pages.edgeone.ai/document/agents-quick-start)
-- [Makers Models](https://pages.edgeone.ai/document/models)
+- **Workspace Branding:** Update `ai-chat-assistant.config.json` for name, welcome text, and suggested questions; adjust widget colors via `data-color`.
+- **System Prompt:** Edit `systemPrompt` in the config file to set tone and behavior for service responses.
+- **UI / Theme:** Modify `app/widget/page.tsx`, `app/globals.css`, and `tailwind.config.ts`.
+- **Embed Script:** Customize `public/embed.js` for bubble icon, position logic, or iframe handling.
+- **Service Logic:** Update handlers under `services/` to extend routing, tool calling, or session handling.
 
 ## License
 
