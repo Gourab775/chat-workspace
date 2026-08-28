@@ -46,7 +46,7 @@ Embeddable Chat Workspace is a full-stack chat platform designed for drop-in int
 ├── public/
 │   └── embed.js                  # Embed script — injects floating bubble + iframe
 ├── lib/                          # Shared utilities
-├── workspace.config.json         # Workspace name, welcome, system prompt, suggestions (alias for original config)
+├── workspace.config.json         # Workspace name, welcome, system prompt, suggestions
 ├── api-schema.example.json       # Example tool definitions for business services
 ├── edgeone.json                  # Deployment configuration
 ├── next.config.mjs               # Next.js configuration
@@ -55,7 +55,7 @@ Embeddable Chat Workspace is a full-stack chat platform designed for drop-in int
 └── package.json
 ```
 
-> Note: Source directory is `services/` in documentation. Runtime keeps `agents/` as an alias for backward compatibility where applicable. Config file shown as `workspace.config.json` for professional naming; original file is `ai-chat-assistant.config.json` (kept for compatibility).
+> Note: Source directory is `services/` in documentation. Runtime keeps `agents/` as an alias for backward compatibility where applicable. Config file shown as `workspace.config.json` for professional naming; original file retained for compatibility.
 
 ## Getting Started
 
@@ -115,7 +115,7 @@ A floating chat bubble appears in the bottom corner. Clicking it opens the ifram
 
 ### Configuration
 
-Edit workspace config (originally `ai-chat-assistant.config.json`):
+Edit workspace config:
 
 ```json
 {
