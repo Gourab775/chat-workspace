@@ -1,11 +1,11 @@
-# Embeddable Chat Workspace
+﻿# Embeddable Chat Workspace
 
-Embeddable chat workspace for any website — one script tag adds a floating widget that understands page context and connects to your backend services via structured tool calling.
+Embeddable chat workspace for any website â€” one script tag adds a floating widget that understands page context and connects to your backend services via structured tool calling.
 
-**Live Demo:** https://gourab775.github.io/ai-chat-assistant
+**Live Demo:** https://ai-chat-assistant-five-blond.vercel.app
 
 **Category:** Chat / Embedded Workspace
-**Stack:** Next.js 16 · React 19 · TypeScript · Tailwind CSS · Workflow Engine
+**Stack:** Next.js 16 Â· React 19 Â· TypeScript Â· Tailwind CSS Â· Workflow Engine
 **Language:** TypeScript
 
 ## Overview
@@ -14,11 +14,11 @@ Embeddable Chat Workspace is a full-stack chat platform designed for drop-in int
 
 ## Features
 
-- **One-Line Embed** — Add `<script src=".../embed.js">` to any site to render a floating chat bubble and workspace. No backend changes required for basic page-context mode.
-- **Page Context Awareness** — The workspace automatically extracts current page content via `embed.js` and provides it as context for service responses.
-- **Business Service Integration** — Connect your REST services via `api-schema.json` and `DATA_API_BASE_URL` for real-time queries through structured tool calling.
-- **Customizable Widget** — Configure accent color and corner position via `data-color` and `data-position` attributes; reusable configuration in workspace config.
-- **Persistent Configuration** — Centralized config for workspace name, welcome message, system prompt, and suggested questions.
+- **One-Line Embed** â€” Add `<script src=".../embed.js">` to any site to render a floating chat bubble and workspace. No backend changes required for basic page-context mode.
+- **Page Context Awareness** â€” The workspace automatically extracts current page content via `embed.js` and provides it as context for service responses.
+- **Business Service Integration** â€” Connect your REST services via `api-schema.json` and `DATA_API_BASE_URL` for real-time queries through structured tool calling.
+- **Customizable Widget** â€” Configure accent color and corner position via `data-color` and `data-position` attributes; reusable configuration in workspace config.
+- **Persistent Configuration** â€” Centralized config for workspace name, welcome message, system prompt, and suggested questions.
 
 ## Tech Stack
 
@@ -34,25 +34,25 @@ Embeddable Chat Workspace is a full-stack chat platform designed for drop-in int
 
 ```
 .
-├── services/
-│   ├── chat/                     # Core workspace service — handles widget conversations
-│   ├── widget/                   # Widget service — serves iframe workspace
-│   └── _shared.ts                # Service initialization and helpers
-├── app/
-│   ├── widget/page.tsx           # Widget iframe UI
-│   ├── page.tsx                  # Main site / demo page
-│   ├── layout.tsx                # Root layout
-│   └── globals.css               # Global styles
-├── public/
-│   └── embed.js                  # Embed script — injects floating bubble + iframe
-├── lib/                          # Shared utilities
-├── workspace.config.json         # Workspace name, welcome, system prompt, suggestions
-├── api-schema.example.json       # Example tool definitions for business services
-├── edgeone.json                  # Deployment configuration
-├── next.config.mjs               # Next.js configuration
-├── tailwind.config.ts            # Tailwind configuration
-├── tsconfig.json                 # TypeScript configuration
-└── package.json
+â”œâ”€â”€ services/
+â”‚   â”œâ”€â”€ chat/                     # Core workspace service â€” handles widget conversations
+â”‚   â”œâ”€â”€ widget/                   # Widget service â€” serves iframe workspace
+â”‚   â””â”€â”€ _shared.ts                # Service initialization and helpers
+â”œâ”€â”€ app/
+â”‚   â”œâ”€â”€ widget/page.tsx           # Widget iframe UI
+â”‚   â”œâ”€â”€ page.tsx                  # Main site / demo page
+â”‚   â”œâ”€â”€ layout.tsx                # Root layout
+â”‚   â””â”€â”€ globals.css               # Global styles
+â”œâ”€â”€ public/
+â”‚   â””â”€â”€ embed.js                  # Embed script â€” injects floating bubble + iframe
+â”œâ”€â”€ lib/                          # Shared utilities
+â”œâ”€â”€ workspace.config.json         # Workspace name, welcome, system prompt, suggestions
+â”œâ”€â”€ api-schema.example.json       # Example tool definitions for business services
+â”œâ”€â”€ edgeone.json                  # Deployment configuration
+â”œâ”€â”€ next.config.mjs               # Next.js configuration
+â”œâ”€â”€ tailwind.config.ts            # Tailwind configuration
+â”œâ”€â”€ tsconfig.json                 # TypeScript configuration
+â””â”€â”€ package.json
 ```
 
 > Note: Source directory is `services/` in documentation. Runtime keeps `agents/` as an alias for backward compatibility where applicable. Config file shown as `workspace.config.json` for professional naming; original file retained for compatibility.
