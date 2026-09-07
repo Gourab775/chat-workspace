@@ -81,7 +81,8 @@ Open http://localhost:3000 for the main site and http://localhost:3000/widget fo
 |----------|----------|-------------|
 | `SERVICE_API_KEY` | Yes* | Platform service API key (Open-Compatible provider key). |
 | `SERVICE_BASE_URL` | Yes* | Gateway base URL, e.g. `https://gateway.edgeone.link/v1`. |
-| `SERVICE_MODEL` | No | Model identifier. Defaults to `@makers/deepseek-v3`. |
+| `SERVICE_MODEL` | No | Model identifier. Defaults to `@makers/hy3-preview`. |
+| `DATABASE_URL` | No | Neon Postgres connection string for persistent chat history. Without it, history is in-memory only. |
 | `DATA_API_BASE_URL` | No | Your backend API base URL for business service integration. |
 | `DATA_API_KEY` | No | Auth token for your backend API. |
 

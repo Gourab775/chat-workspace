@@ -33,7 +33,7 @@ export default function ChatPanel({ mode = 'full' }: { mode?: 'full' | 'widget' 
   useEffect(() => {
     setIsZh(navigator.language?.startsWith('zh') ?? false);
   }, []);
-  const [conversationId] = useState(() => {
+  const [conversationId, setConversationId] = useState(() => {
     if (typeof window === 'undefined') return '';
     const key = 'ai-chat-assistant-cid';
     let cid = localStorage.getItem(key);
@@ -190,7 +190,11 @@ export default function ChatPanel({ mode = 'full' }: { mode?: 'full' | 'widget' 
   const clearChat = useCallback(() => {
     setMessages([]);
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('ai-chat-assistant-cid');
+      // Rotate to a fresh conversation so server/DB history doesn't leak
+      // into the new chat.
+      const cid = crypto.randomUUID();
+      localStorage.setItem('ai-chat-assistant-cid', cid);
+      setConversationId(cid);
     }
   }, []);
 

@@ -13,6 +13,7 @@ import { createLogger, sseEvent, createSSEResponse, corsResponse, streamChat } f
 import type { ChatMessage } from '../_shared';
 import { loadApiSchema, callTool } from '../_api-proxy';
 import type { ApiSchema } from '../_api-proxy';
+import { loadHistory, saveMessage } from '../_db';
 import { readFile } from 'fs/promises';
 import { resolve } from 'path';
 
@@ -133,8 +134,20 @@ export async function onRequest(context: any) {
   const signal: AbortSignal | undefined = context.request.signal;
   const conversationId: string = body.conversation_id || context.conversation_id || '';
   const model = resolveModelName(ctxEnv);
-  const baseURL = ctxEnv.AI_GATEWAY_BASE_URL || '';
-  const apiKey = ctxEnv.AI_GATEWAY_API_KEY || '';
+  // SERVICE_* is canonical; AI_GATEWAY_* kept as backward-compat alias
+  const baseURL = ctxEnv.SERVICE_BASE_URL || ctxEnv.AI_GATEWAY_BASE_URL || '';
+  const apiKey = ctxEnv.SERVICE_API_KEY || ctxEnv.AI_GATEWAY_API_KEY || '';
+
+  if (!apiKey || !baseURL) {
+    return corsResponse(
+      {
+        error:
+          'Missing AI gateway credentials. Set SERVICE_API_KEY and SERVICE_BASE_URL ' +
+          '(aliases: AI_GATEWAY_API_KEY, AI_GATEWAY_BASE_URL) in your environment.',
+      },
+      500,
+    );
+  }
 
   // ─── Assemble available tools (Layer C) ──────────────────────────────────
   const tools: any[] = [];
@@ -151,12 +164,22 @@ export async function onRequest(context: any) {
 
   const systemPrompt = buildSystemPrompt(config, ctxEnv, pageContext);
 
-  // ─── Conversation history ────────────────────────────────────────────────
+  // ─── Conversation history (memory cache + Postgres persistence) ──────────
   if (!_history.has(conversationId)) {
     _history.set(conversationId, []);
   }
   const history = _history.get(conversationId)!;
-  history.push({ role: 'user', content: message });
+  // Cold start (fresh deploy / new instance): seed memory from DB
+  if (history.length === 0 && conversationId) {
+    const persisted = await loadHistory(ctxEnv, conversationId, MAX_HISTORY);
+    if (persisted && persisted.length > 0) {
+      history.push(...persisted);
+      logger.log(`[history] seeded ${persisted.length} messages from DB for cid=${conversationId}`);
+    }
+  }
+  const userMsg: ChatMessage = { role: 'user', content: message };
+  history.push(userMsg);
+  await saveMessage(ctxEnv, conversationId, userMsg);
   while (history.length > MAX_HISTORY) history.shift();
 
   logger.log(`[request] cid=${conversationId}, model=${model}, tools=${tools.length}, msg="${message.slice(0, 80)}"`);
@@ -210,7 +233,7 @@ export async function onRequest(context: any) {
 
         // Save assistant message to history
         if (assistantText || toolCalls.length > 0) {
-          history.push({
+          const assistantMsg: ChatMessage = {
             role: 'assistant',
             content: assistantText,
             ...(toolCalls.length > 0 ? {
@@ -220,7 +243,9 @@ export async function onRequest(context: any) {
                 function: { name: tc.name, arguments: tc.arguments },
               })),
             } : {}),
-          });
+          };
+          history.push(assistantMsg);
+          await saveMessage(ctxEnv, conversationId, assistantMsg);
           while (history.length > MAX_HISTORY) history.shift();
         }
 
@@ -262,6 +287,7 @@ export async function onRequest(context: any) {
             content: JSON.stringify(result),
             tool_call_id: tc.id,
           });
+          await saveMessage(ctxEnv, conversationId, history[history.length - 1]);
           while (history.length > MAX_HISTORY) history.shift();
         }
 
