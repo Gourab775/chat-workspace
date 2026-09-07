@@ -56,7 +56,7 @@ function buildSystemPrompt(
   pageContext?: { title?: string; url?: string; content?: string },
 ): string {
   let prompt = env.SYSTEM_PROMPT || config.systemPrompt ||
-    'You are a helpful, friendly AI assistant. Answer questions clearly and concisely. Use Markdown formatting when appropriate.';
+    'You are a helpful, friendly AI assistant. Answer questions clearly and concisely. Use Markdown formatting when appropriate. Always reply in the same language the user writes in.';
 
   prompt += '\n\nWhen using tools, always provide all required parameters. If a tool call fails due to missing parameters, do NOT retry with the same empty input — instead, try a different tool or answer based on available information.';
 

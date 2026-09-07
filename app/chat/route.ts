@@ -5,12 +5,10 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 /**
- * Next.js adapter for the EdgeOne workflow chat handler.
- * The frontend posts to /chat, so this bridges NextRequest
+ * Next.js route for the chat handler.
+ * The frontend posts to /chat; this bridges NextRequest
  * into the { request, env, conversation_id } context shape
- * that agents/chat expects. (On EdgeOne Makers the platform
- * routes /chat to agents/chat directly; this route covers
- * local dev and other hosts like Vercel/Netlify.)
+ * that agents/chat expects.
  */
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));

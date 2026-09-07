@@ -5,8 +5,8 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 /**
- * Next.js adapter for the EdgeOne workflow stop handler.
- * The frontend posts to /stop, so this bridges NextRequest
+ * Next.js route for the stop handler.
+ * The frontend posts to /stop; this bridges NextRequest
  * into the context shape that agents/stop expects.
  */
 export async function POST(req: NextRequest) {

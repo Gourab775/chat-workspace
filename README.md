@@ -10,7 +10,7 @@ Embeddable chat workspace for any website — one script tag adds a floating wid
 
 ## Overview
 
-Embeddable Chat Workspace is a full-stack chat platform designed for drop-in integration on any website. It combines page-context awareness with backend service connectivity, enabling visitors to get contextual answers and trigger business operations without leaving the page. A single script tag deploys the floating widget and iframe-based workspace with configurable theming and position.
+Embeddable Chat Workspace is a full-stack chat platform designed for drop-in integration on any website. It combines page-context awareness with backend service connectivity, enabling visitors to get contextual answers and trigger business operations without leaving the page. A single script tag adds the floating widget and iframe-based workspace with configurable theming and position.
 
 ## Features
 
@@ -45,10 +45,8 @@ Embeddable Chat Workspace is a full-stack chat platform designed for drop-in int
 │   └── globals.css               # Global styles
 ├── public/
 │   └── embed.js                  # Embed script — injects floating bubble + iframe
-├── lib/                          # Shared utilities
-├── workspace.config.json         # Workspace name, welcome, system prompt, suggestions
+├── ai-chat-assistant.config.json # Workspace name, welcome, system prompt, suggestions
 ├── api-schema.example.json       # Example tool definitions for business services
-├── edgeone.json                  # Deployment configuration
 ├── next.config.mjs               # Next.js configuration
 ├── tailwind.config.ts            # Tailwind configuration
 ├── tsconfig.json                 # TypeScript configuration
@@ -86,14 +84,14 @@ Open http://localhost:3000 for the main site and http://localhost:3000/widget fo
 | `DATA_API_BASE_URL` | No | Your backend API base URL for business service integration. |
 | `DATA_API_KEY` | No | Auth token for your backend API. |
 
-\* Automatically injected when deploying via EdgeOne Makers one-click deploy. For local development, set manually.
+\* Set these manually for local development and in your hosting provider (e.g. Vercel → Project Settings → Environment Variables) for hosted environments.
 
 > Alias: `SERVICE_*` is the canonical naming in this workspace. `SERVICE_API_KEY`, `SERVICE_BASE_URL`, and `SERVICE_MODEL` are aliases for `AI_GATEWAY_API_KEY`, `AI_GATEWAY_BASE_URL`, and `AI_GATEWAY_MODEL` for backward compatibility. Either naming works; prefer `SERVICE_*` for new deployments.
 
 ### Embed on Your Website
 
 ```html
-<script src="https://your-workspace.edgeone.app/embed.js" async></script>
+<script src="https://your-domain.com/embed.js" async></script>
 ```
 
 A floating chat bubble appears in the bottom corner. Clicking it opens the iframe workspace.
@@ -102,7 +100,7 @@ A floating chat bubble appears in the bottom corner. Clicking it opens the ifram
 
 ```html
 <script
-  src="https://your-workspace.edgeone.app/embed.js"
+  src="https://your-domain.com/embed.js"
   data-color="#10b981"
   data-position="bottom-left"
   async>
@@ -148,23 +146,14 @@ Place an `api-schema.json` in the project root to enable workspace queries to yo
 
 Set `DATA_API_BASE_URL` to your backend address.
 
-## Deployment
+## Hosting
 
-This project uses `edgeone.json` for EdgeOne Makers deployment:
+Import the repository in Vercel (framework: Next.js) and set these Environment Variables for Production, Preview, and Development:
 
-```json
-{
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "framework": "nextjs"
-}
-```
-
-**Options:**
-
-- **Vercel:** Import the repository, set `SERVICE_API_KEY` and `SERVICE_BASE_URL` in Environment Variables, framework Next.js, deploy.
-- **Netlify:** Build command `npm run build`, publish `.next` (with Next.js plugin), add the same env vars.
-- **GitHub Pages (static export):** Configure `next.config.mjs` with `output: 'export'` and publish `out/` via Actions for static site. For workspace services, use Vercel/EdgeOne/Netlify Functions.
+- `SERVICE_API_KEY` — AI provider key (e.g. OpenRouter)
+- `SERVICE_BASE_URL` — provider base URL (e.g. `https://openrouter.ai/api/v1`)
+- `SERVICE_MODEL` — model id (e.g. `minimax/minimax-m3:free`)
+- `DATABASE_URL` — Postgres connection string for persistent chat history (optional; without it history is in-memory only)
 
 ## Customization
 

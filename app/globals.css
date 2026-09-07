@@ -38,3 +38,12 @@
 .prose-chat h1 { @apply text-base; }
 .prose-chat h2 { @apply text-sm; }
 .prose-chat h3 { @apply text-sm; }
+
+/* Dark mode overrides for chat markdown */
+.dark .prose-chat { color: #e7e7e7; }
+.dark .prose-chat a { color: #8ab4ff; }
+.dark .prose-chat pre { background: rgba(255,255,255,.08); }
+.dark .prose-chat code:not(pre code) { background: rgba(255,255,255,.12); }
+.dark .prose-chat th { background: rgba(255,255,255,.06); }
+.dark .prose-chat th, .dark .prose-chat td { border-color: rgba(255,255,255,.15); }
+.dark .prose-chat blockquote { border-color: rgba(255,255,255,.25); color: #b5b5b5; }

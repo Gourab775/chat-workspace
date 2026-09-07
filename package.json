@@ -6,7 +6,6 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "deploy": "edgeone makers deploy",
         "start": "next start"
     },
     "dependencies": {
